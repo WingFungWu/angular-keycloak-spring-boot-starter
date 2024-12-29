@@ -1,0 +1,45 @@
+services:
+  web:
+    image: node:20-alpine3.20
+    container_name: web
+    entrypoint: tail
+    command: -f /dev/null
+    volumes:
+      - ./:/app
+    ports:
+      - 4200:4200
+
+  db:
+    image: mysql:latest
+    container_name: db
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db:/app/var/lib/mysql
+    ports:
+      - 3306:3306
+  
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: keycloak
+    command: start-dev
+    environment:
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://host.docker.internal:3306/${MYSQL_DATABASE}
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KC_BOOTSTRAP_ADMIN_USERNAME}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+    volumes:
+      - keycloak:/app
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 9000:9000
+    
+volumes:
+  db:
+  keycloak:
