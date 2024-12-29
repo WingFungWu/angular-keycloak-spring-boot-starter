@@ -1,0 +1,8 @@
+services:
+  api:
+    build:
+      context: .
+    image: angular-keycloak-spring-boot-starter/api:dev
+    container_name: api
+    entrypoint: tail
+    command: -f /dev/null
