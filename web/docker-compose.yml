@@ -1,0 +1,7 @@
+services:
+  web:
+    build: .
+    image: angular-keycloak-spring-boot-starter/web:dev
+    container_name: web-build
+    entrypoint: tail
+    command: -f /dev/null

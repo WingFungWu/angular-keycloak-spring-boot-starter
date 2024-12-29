@@ -18,7 +18,7 @@ services:
     volumes:
       - db:/app/var/lib/mysql
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT}:3306
   
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.7
@@ -26,7 +26,7 @@ services:
     command: start-dev
     environment:
       - KC_DB=mysql
-      - KC_DB_URL=jdbc:mysql://host.docker.internal:3306/${MYSQL_DATABASE}
+      - KC_DB_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE}
       - KC_DB_USERNAME=root
       - KC_DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - KC_BOOTSTRAP_ADMIN_USERNAME=${KC_BOOTSTRAP_ADMIN_USERNAME}
